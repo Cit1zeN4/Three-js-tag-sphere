@@ -20,12 +20,12 @@ var line = new THREE.LineSegments(wireframe, material);
 scene.add(line);
 
 var materialArray = [];
-var texture_front = new THREE.TextureLoader().load('https://i.ibb.co/VVVpHn5/Just-Snow-20190722-235955.jpg');
-var texture_back = new THREE.TextureLoader().load('https://i.ibb.co/VVVpHn5/Just-Snow-20190722-235955.jpg');
-var texture_top = new THREE.TextureLoader().load('https://i.ibb.co/VVVpHn5/Just-Snow-20190722-235955.jpg');
-var texture_bottom = new THREE.TextureLoader().load('https://i.ibb.co/VVVpHn5/Just-Snow-20190722-235955.jpg');
-var texture_right = new THREE.TextureLoader().load('https://i.ibb.co/VVVpHn5/Just-Snow-20190722-235955.jpg');
-var texture_left = new THREE.TextureLoader().load('https://i.ibb.co/VVVpHn5/Just-Snow-20190722-235955.jpg');
+var texture_front = new THREE.TextureLoader().load('https://i.ibb.co/gvyMv95/loopable-stars-black-empty-space-4k-vjj549yxl-F0000.jpg');
+var texture_back = new THREE.TextureLoader().load('https://i.ibb.co/gvyMv95/loopable-stars-black-empty-space-4k-vjj549yxl-F0000.jpg');
+var texture_top = new THREE.TextureLoader().load('https://i.ibb.co/gvyMv95/loopable-stars-black-empty-space-4k-vjj549yxl-F0000.jpg');
+var texture_bottom = new THREE.TextureLoader().load('https://i.ibb.co/gvyMv95/loopable-stars-black-empty-space-4k-vjj549yxl-F0000.jpg');
+var texture_right = new THREE.TextureLoader().load('https://i.ibb.co/gvyMv95/loopable-stars-black-empty-space-4k-vjj549yxl-F0000.jpg');
+var texture_left = new THREE.TextureLoader().load('https://i.ibb.co/gvyMv95/loopable-stars-black-empty-space-4k-vjj549yxl-F0000.jpg');
 
 materialArray.push(new THREE.MeshBasicMaterial({ map: texture_front }));
 materialArray.push(new THREE.MeshBasicMaterial({ map: texture_back }));
