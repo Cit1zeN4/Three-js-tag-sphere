@@ -1,4 +1,4 @@
-var testing_vector = 1;
+var testing_vector = 44;
 
 var scene = new THREE.Scene();
 var w = window.innerWidth, h = window.innerHeight;
@@ -77,6 +77,7 @@ $(document).ready(function(){
         camera.position.x = sphere.geometry.vertices[testing_vector].x;
         camera.position.y = sphere.geometry.vertices[testing_vector].y;
         camera.position.z = sphere.geometry.vertices[testing_vector].z;
+        controls.zoomout(20);
     });
 });
 
