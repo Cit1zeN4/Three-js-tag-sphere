@@ -97,10 +97,6 @@ function centreCameraOnLabel(factor) {
             camera.lookAt(sphere.position);
         })
         .start();
-
-    camera.position.x = sphere.geometry.vertices[testing_vector].x * factor;
-    camera.position.y = sphere.geometry.vertices[testing_vector].y * factor;
-    camera.position.z = sphere.geometry.vertices[testing_vector].z * factor;
 };
 
 $(document).ready(function () {
