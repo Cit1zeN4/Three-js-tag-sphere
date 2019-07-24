@@ -613,6 +613,16 @@ THREE.TrackballControls = function ( object, domElement ) {
 	// force an update at start
 	this.update();
 
+	// custom
+
+	/*
+
+	this.zoomout = function(value){
+		_zoomStart.y -= value * 0.01;
+	};
+
+	*/
+
 };
 
 THREE.TrackballControls.prototype = Object.create( THREE.EventDispatcher.prototype );

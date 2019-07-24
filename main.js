@@ -1,3 +1,5 @@
+var testing_vector = 44;
+
 var scene = new THREE.Scene();
 var w = window.innerWidth, h = window.innerHeight;
 var camera = new THREE.PerspectiveCamera(60, w / h, 1, 1000);
@@ -64,10 +66,22 @@ function getScreenPosition(position) {
 
 function updateLabel() {
     var verts = sphere.geometry.vertices;
-    var pos = getScreenPosition(verts[70]);
+    var pos = getScreenPosition(verts[testing_vector]);
 
     label.style.left = pos.x + "px";
     label.style.top = pos.y + "px";
 }
+
+function centreCameraOnLabel(factor) {
+    camera.position.x = sphere.geometry.vertices[testing_vector].x * factor;
+    camera.position.y = sphere.geometry.vertices[testing_vector].y * factor;
+    camera.position.z = sphere.geometry.vertices[testing_vector].z * factor;
+};
+
+$(document).ready(function () {
+    $('#label').click(function () {
+        centreCameraOnLabel(3);
+    });
+});
 
 animate();
