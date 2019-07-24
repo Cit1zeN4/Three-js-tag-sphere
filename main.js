@@ -13,8 +13,27 @@ controls.noPan = true;
 controls.addEventListener("change", updateLabel);
 
 var geometry = new THREE.SphereGeometry(9, 12, 12);
-var material = new THREE.MeshBasicMaterial({ color: 0x3d3d3d });
-var depthMaterial = new THREE.MeshDepthMaterial();
+var material = new THREE.MeshBasicMaterial({
+     color: 0xafafaf,
+     wireframe: true,
+     wireframeLinewidth: 40,
+     wireframeLinecap: 'round',
+     wireframeLinejoin: 'round',
+     shading: THREE.SmoothShading,
+     vertexColors: THREE.NoColors, //used if colors on geomtry
+     reflectivity: 1,
+     refractionRatio: 0.98,
+     combine: THREE.MultiplyOperation,
+     fog: true,
+     aoMap: null,
+     aoMapIntensity: 1,
+     envMap: null,
+     map: null,
+     specularMap: null,
+     alphaMap: null,
+     skinning: true,
+     morphTargets: false
+   });
 var sphere = new THREE.Mesh(geometry, wireframe);
 var wireframe = new THREE.WireframeGeometry(geometry);
 
