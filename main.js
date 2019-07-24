@@ -12,9 +12,9 @@ controls.rotateSpeed = 2;
 controls.noPan = true;
 controls.addEventListener("change", updateLabel);
 
-var geometry = new THREE.SphereGeometry(9, 12, 12);
+var geometry = new THREE.SphereGeometry(9, 25, 25);
 var material = new THREE.MeshBasicMaterial({
-     color: 0xafafaf,
+     color: 0x4d4d4d,
      wireframe: true,
      wireframeLinewidth: 40,
      wireframeLinecap: 'round',
@@ -114,8 +114,34 @@ function centreCameraOnLabel(factor) {
         })
         .onComplete(function(){
             camera.lookAt(sphere.position);
+        });
+
+    var zoomInFrom = {
+        x: to.x,
+        y: to.y,
+        z: to.z
+    };
+    
+    var zoomInTo = {
+        x: zoomInFrom.x / factor,
+        y: zoomInFrom.y / factor,
+        z: zoomInFrom.z / factor,
+    };
+    
+    var tweenZoomIn = new TWEEN.Tween(zoomInFrom)
+        .to(zoomInTo, 750)
+        .easing(TWEEN.Easing.Quadratic.InOut)
+        .onUpdate(function(){
+            camera.position.set(this.x, this.y, this.z);
+            camera.lookAt(sphere.position);
         })
-        .start();
+        .onComplete(function(){
+            camera.lookAt(sphere.position);
+        });
+
+    tween.chain(tweenZoomIn);
+    tweenZoomIn.delay(20);
+    tween.start();
 };
 
 $(document).ready(function () {
