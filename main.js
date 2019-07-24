@@ -106,8 +106,8 @@ function centreCameraOnLabel(factor) {
     };
 
     var tween = new TWEEN.Tween(from)
-        .to(to, 600)
-        .easing(TWEEN.Easing.Linear.None)
+        .to(to, 800)
+        .easing(TWEEN.Easing.Quadratic.InOut)
         .onUpdate(function(){
             camera.position.set(this.x, this.y, this.z);
             camera.lookAt(sphere.position);
