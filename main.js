@@ -48,6 +48,7 @@ var label = document.getElementById("label");
 camera.position.z = 30;
 
 function animate() {
+    TWEEN.update();
     requestAnimationFrame(animate);
     controls.update();
     renderer.render(scene, camera);
@@ -73,6 +74,30 @@ function updateLabel() {
 }
 
 function centreCameraOnLabel(factor) {
+    var from = {
+        x: camera.position.x,
+        y: camera.position.y,
+        z: camera.position.z
+    };
+
+    var to = {
+        x: sphere.geometry.vertices[testing_vector].x * factor,
+        y: sphere.geometry.vertices[testing_vector].y * factor,
+        z: sphere.geometry.vertices[testing_vector].z * factor
+    };
+
+    var tween = new TWEEN.Tween(from)
+        .to(to, 600)
+        .easing(TWEEN.Easing.Linear.None)
+        .onUpdate(function(){
+            camera.position.set(this.x, this.y, this.z);
+            camera.lookAt(sphere.position);
+        })
+        .onComplete(function(){
+            camera.lookAt(sphere.position);
+        })
+        .start();
+
     camera.position.x = sphere.geometry.vertices[testing_vector].x * factor;
     camera.position.y = sphere.geometry.vertices[testing_vector].y * factor;
     camera.position.z = sphere.geometry.vertices[testing_vector].z * factor;
