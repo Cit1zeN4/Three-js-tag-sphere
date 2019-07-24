@@ -72,12 +72,15 @@ function updateLabel() {
     label.style.top = pos.y + "px";
 }
 
-$(document).ready(function(){
-    $('#label').click(function(){
-        camera.position.x = sphere.geometry.vertices[testing_vector].x;
-        camera.position.y = sphere.geometry.vertices[testing_vector].y;
-        camera.position.z = sphere.geometry.vertices[testing_vector].z;
-        controls.zoomout(20);
+function centreCameraOnLabel(factor) {
+    camera.position.x = sphere.geometry.vertices[testing_vector].x * factor;
+    camera.position.y = sphere.geometry.vertices[testing_vector].y * factor;
+    camera.position.z = sphere.geometry.vertices[testing_vector].z * factor;
+};
+
+$(document).ready(function () {
+    $('#label').click(function () {
+        centreCameraOnLabel(3);
     });
 });
 

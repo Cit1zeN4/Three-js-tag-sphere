@@ -615,9 +615,13 @@ THREE.TrackballControls = function ( object, domElement ) {
 
 	// custom
 
+	/*
+
 	this.zoomout = function(value){
 		_zoomStart.y -= value * 0.01;
 	};
+
+	*/
 
 };
 
