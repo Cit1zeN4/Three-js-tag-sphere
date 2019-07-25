@@ -63,7 +63,6 @@ var skybox = new THREE.Mesh(skyboxGeo, materialArray);
 scene.add(skybox);
 
 var label = document.getElementById("label");
-
 camera.position.z = 30;
 
 function animate() {
@@ -84,12 +83,25 @@ function getScreenPosition(position) {
     return vector;
 }
 
-function updateLabel() {
+//binding object with vector
+//134 vectors
+function updateLabel(ObjectOnSphere) {
     var verts = sphere.geometry.vertices;
+
+    //This is stay here on not a specific time
+    var pos = getScreenPosition(verts[70]);
     var pos = getScreenPosition(verts[testing_vector]);
 
     label.style.left = pos.x + "px";
     label.style.top = pos.y + "px";
+
+    for(var i = 0;i < verts.length;i++){
+      var pos = getScreenPosition(verts[i]);
+      if(ObjectOnSphere[i]!==null){
+        ObjectOnSphere[i].style.left = pos.x + "px";
+        ObjectOnSphere[i].style.top = pos.y + "px";
+      }
+    }
 }
 
 function centreCameraOnLabel(factor) {
