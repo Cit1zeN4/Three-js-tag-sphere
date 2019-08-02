@@ -62,6 +62,13 @@ var skyboxGeo = new THREE.BoxGeometry(1000, 1000, 1000);
 var skybox = new THREE.Mesh(skyboxGeo, materialArray);
 scene.add(skybox);
 
+var labels = [
+    {label: "text1", vector: null},
+    {label: "text2", vector: null},
+    {label: "text3", vector: null},
+    {label: "text4", vector: null}
+];
+
 var label = document.getElementById("label");
 camera.position.z = 30;
 
@@ -70,6 +77,21 @@ function animate() {
     requestAnimationFrame(animate);
     controls.update();
     renderer.render(scene, camera);
+}
+
+function createLabels(parent){
+    for(var i = 0; i < labels.length; i++){
+        var domParent = $(parent);
+        domParent.append('<div id="label" data-id=' + i + '>' + labels[i].label + '</div>');
+    }
+}
+
+function addLabelOnSphere(){
+    var verts = sphere.geometry.vertices;
+    var param = verts.length / labels.length;
+    for(var i = 0; i < labels.length; i++){
+        labels[i].vector = verts[Math.round(i * param)];
+    }
 }
 
 function getScreenPosition(position) {
@@ -83,26 +105,14 @@ function getScreenPosition(position) {
     return vector;
 }
 
-//binding object with vector
-//134 vectors
 function updateLabel() {
-    var verts = sphere.geometry.vertices;
-
-    //This is stay here on not a specific time
-    var pos = getScreenPosition(verts[testing_vector]);
-
-    label.style.left = pos.x + "px";
-    label.style.top = pos.y + "px";
-
-    /*for(var i = 0;i < verts.length;i++){
-      var pos = getScreenPosition(verts[i]);
-      if(ObjectOnSphere[i]!==null){
-        ObjectOnSphere[i].style.left = pos.x + "px";
-        ObjectOnSphere[i].style.top = pos.y + "px";
-      }
+    for(var i = 0; i < labels.length; i++){
+        var pos = getScreenPosition(labels[i].vector);
+        var label = $('#label[data-id = ' + i + ']');
+        label.css('left', pos.x + 'px');
+        label.css('top', pos.y + 'px');
     }
-    */
-}
+};
 
 function centreCameraOnLabel(factor) {
     var from = {
@@ -161,5 +171,8 @@ $(document).ready(function () {
         centreCameraOnLabel(3);
     });
 });
+
+createLabels('body');
+addLabelOnSphere();
 
 animate();
