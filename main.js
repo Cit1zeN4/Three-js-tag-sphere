@@ -65,27 +65,32 @@ scene.add(skybox);
 var labels = [
     {label: "text1", vector: null},
     {label: "text2", vector: null},
-    {label: "text2", vector: null},
-    {label: "text2", vector: null},
-    {label: "text2", vector: null},
-    {label: "text2", vector: null},
-    {label: "text2", vector: null},
-    {label: "text2", vector: null},
-    {label: "text2", vector: null},
-    {label: "text2", vector: null},
-    {label: "text2", vector: null},
-    {label: "text2", vector: null},
-    {label: "text2", vector: null}
+    {label: "text3", vector: null},
+    {label: "text4", vector: null},
+    {label: "text5", vector: null},
+    {label: "text6", vector: null},
+    {label: "text7", vector: null},
+    {label: "text8", vector: null},
+    {label: "text9", vector: null},
+    {label: "text10", vector: null},
+    {label: "text11", vector: null},
+    {label: "text12", vector: null},
+    {label: "text13", vector: null}
 ];
 
 var label = document.getElementById("label");
 camera.position.z = 30;
 
-function LabelBehindSphere(opacity){
-    if(opacity < 0)
+function LabelBehindSphere(opacity, fontSize){
+    if(opacity < 0 && fontSize < 0){
         opacity = 0;
-    if(opacity > 1)
+        fontSize = 0;
+    }
+    if(opacity > 1 && fontSize > 1)
+    {
         opacity = 1;
+        fontSize = 1;
+    }
 
     var cameraFrom = new THREE.Vector3(camera.position.x, camera.position.y, camera.position.z);
 
@@ -96,13 +101,19 @@ function LabelBehindSphere(opacity){
     
         if(distanceToSpher - distanceToLabel < 0){
             var factor = (1 / (distanceToSpher - distanceToLabel)).toFixed(2) * -1;
+            var fontSizeFactor = factor + fontSize;
             factor += opacity;
             if(factor > 0 && factor <= 1){
                 label[i].style.opacity = factor;
             }
+            if(fontSizeFactor > 0 && fontSizeFactor <= 1){
+                label[i].style.transform = 'scale(' + fontSizeFactor + ')';
+                console.log(fontSizeFactor);
+            }
         }
         else{
             label[i].style.opacity = 1;
+            label[i].style.transform = 'scale(1)';
         }
     }
 }
@@ -128,7 +139,7 @@ function createLabels(parent){
 //and get various figure
 function addLabelOnSphere(location_factor){
     var verts = sphere.geometry.vertices;
-    var param = (verts.length / labels.length)+location_factor;
+    var param = (verts.length / labels.length) + location_factor;
          
     for(var i = 0; i < labels.length; i++){
         labels[i].vector = verts[Math.round(i * param)];        
@@ -154,7 +165,7 @@ function updateLabel() {
         label[i].style.left = pos.x + 'px';
         label[i].style.top = pos.y + 'px';
     }
-    LabelBehindSphere(0.2);
+    LabelBehindSphere(0.28, 0.5);
 };
 
 function centreCameraOnLabel(factor, id) {
@@ -210,6 +221,7 @@ function centreCameraOnLabel(factor, id) {
 };
 
 $(document).ready(function () {
+    updateLabel();
     $('.label').click(function () {
         centreCameraOnLabel(3, this.id);
     });
