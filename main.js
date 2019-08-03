@@ -82,7 +82,7 @@ function animate() {
 function createLabels(parent){
     for(var i = 0; i < labels.length; i++){
         var domParent = $(parent);
-        domParent.append('<div id="label" data-id=' + i + '>' + labels[i].label + '</div>');
+        domParent.append('<div class="label" id=' + i + '>' + labels[i].label + '</div>');
     }
 }
 
@@ -108,9 +108,9 @@ function getScreenPosition(position) {
 function updateLabel() {
     for(var i = 0; i < labels.length; i++){
         var pos = getScreenPosition(labels[i].vector);
-        var label = $('#label[data-id = ' + i + ']');
-        label.css('left', pos.x + 'px');
-        label.css('top', pos.y + 'px');
+        var label = $('.label, [id = ' + i + ']');
+        label[i].style.left = pos.x + 'px';
+        label[i].style.top = pos.y + 'px';
     }
 };
 
@@ -167,7 +167,7 @@ function centreCameraOnLabel(factor) {
 };
 
 $(document).ready(function () {
-    $('#label').click(function () {
+    $('.label').click(function () {
         centreCameraOnLabel(3);
     });
 });
