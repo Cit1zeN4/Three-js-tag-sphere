@@ -66,7 +66,14 @@ var labels = [
     {label: "text1", vector: null},
     {label: "text2", vector: null},
     {label: "text3", vector: null},
-    {label: "text4", vector: null}
+    {label: "text4", vector: null},
+    {label: "text4", vector: null},
+    {label: "text4", vector: null},
+    {label: "text4", vector: null},
+    {label: "text4", vector: null},
+    {label: "text1", vector: null},
+    {label: "text2", vector: null}
+    
 ];
 
 var label = document.getElementById("label");
@@ -85,13 +92,20 @@ function createLabels(parent){
         domParent.append('<div class="label" id=' + i + '>' + labels[i].label + '</div>');
     }
 }
-
-function addLabelOnSphere(){
+//This @param create something figure that consist of our object
+//for example 2 - this is spirals
+//you can change this factor in range from 0.1 to 19.0
+//and it's for minus
+//for plus you can add value in range from 0.1 to from 0.6 
+//and get various figure
+function addLabelOnSphere(location_factor){
     var verts = sphere.geometry.vertices;
-    var param = verts.length / labels.length;
+    var param = (verts.length / labels.length)+location_factor;
+         
     for(var i = 0; i < labels.length; i++){
-        labels[i].vector = verts[Math.round(i * param)];
+        labels[i].vector = verts[Math.round(i * param)];        
     }
+
 }
 
 function getScreenPosition(position) {
@@ -173,6 +187,6 @@ $(document).ready(function () {
 });
 
 createLabels('body');
-addLabelOnSphere();
+addLabelOnSphere(0.4);
 
 animate();
