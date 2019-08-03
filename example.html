@@ -7,6 +7,8 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
     <style>
+        @import url('https://fonts.googleapis.com/css?family=Cousine&display=swap');
+
         body {
             overflow: hidden;
             margin: 0;
@@ -15,8 +17,19 @@
         .label {
             color: white;
             position: absolute;
+            left: 20px;
+            top: 20px;
+            font-family: 'Cousine', monospace;
+            user-select: none;
         }
 
+        .label:hover {
+            -webkit-transform: scale(1.5);
+            -ms-transform: scale(1.5);
+            transform: scale(1.5);
+            transition: 100ms;
+            cursor: pointer;
+        }
     </style>
 </head>
 
