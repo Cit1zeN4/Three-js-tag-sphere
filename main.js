@@ -12,9 +12,9 @@ controls.rotateSpeed = 2;
 controls.noPan = true;
 controls.addEventListener("change", updateLabel);
 
-var geometry = new THREE.SphereGeometry(9, 12, 12);
+var geometry = new THREE.SphereGeometry(9, 25, 25);
 var material = new THREE.MeshBasicMaterial({
-     color: 0xafafaf,
+     color: 0x4d4d4d,
      wireframe: true,
      wireframeLinewidth: 40,
      wireframeLinecap: 'round',
@@ -62,8 +62,14 @@ var skyboxGeo = new THREE.BoxGeometry(1000, 1000, 1000);
 var skybox = new THREE.Mesh(skyboxGeo, materialArray);
 scene.add(skybox);
 
-var label = document.getElementById("label");
+var labels = [
+    {label: "text1", vector: null},
+    {label: "text2", vector: null},
+    {label: "text3", vector: null},
+    {label: "text4", vector: null}
+];
 
+var label = document.getElementById("label");
 camera.position.z = 30;
 
 function animate() {
@@ -71,6 +77,21 @@ function animate() {
     requestAnimationFrame(animate);
     controls.update();
     renderer.render(scene, camera);
+}
+
+function createLabels(parent){
+    for(var i = 0; i < labels.length; i++){
+        var domParent = $(parent);
+        domParent.append('<div class="label" id=' + i + '>' + labels[i].label + '</div>');
+    }
+}
+
+function addLabelOnSphere(){
+    var verts = sphere.geometry.vertices;
+    var param = verts.length / labels.length;
+    for(var i = 0; i < labels.length; i++){
+        labels[i].vector = verts[Math.round(i * param)];
+    }
 }
 
 function getScreenPosition(position) {
@@ -85,14 +106,15 @@ function getScreenPosition(position) {
 }
 
 function updateLabel() {
-    var verts = sphere.geometry.vertices;
-    var pos = getScreenPosition(verts[testing_vector]);
+    for(var i = 0; i < labels.length; i++){
+        var pos = getScreenPosition(labels[i].vector);
+        var label = $('.label, [id = ' + i + ']');
+        label[i].style.left = pos.x + 'px';
+        label[i].style.top = pos.y + 'px';
+    }
+};
 
-    label.style.left = pos.x + "px";
-    label.style.top = pos.y + "px";
-}
-
-function centreCameraOnLabel(factor) {
+function centreCameraOnLabel(factor, id) {
     var from = {
         x: camera.position.x,
         y: camera.position.y,
@@ -100,9 +122,9 @@ function centreCameraOnLabel(factor) {
     };
 
     var to = {
-        x: sphere.geometry.vertices[testing_vector].x * factor,
-        y: sphere.geometry.vertices[testing_vector].y * factor,
-        z: sphere.geometry.vertices[testing_vector].z * factor
+        x: labels[id].vector.x * factor,
+        y: labels[id].vector.y * factor,
+        z: labels[id].vector.z * factor
     };
 
     var tween = new TWEEN.Tween(from)
@@ -114,14 +136,43 @@ function centreCameraOnLabel(factor) {
         })
         .onComplete(function(){
             camera.lookAt(sphere.position);
+        });
+
+    var zoomInFrom = {
+        x: to.x,
+        y: to.y,
+        z: to.z
+    };
+    
+    var zoomInTo = {
+        x: zoomInFrom.x / factor,
+        y: zoomInFrom.y / factor,
+        z: zoomInFrom.z / factor,
+    };
+    
+    var tweenZoomIn = new TWEEN.Tween(zoomInFrom)
+        .to(zoomInTo, 750)
+        .easing(TWEEN.Easing.Quadratic.InOut)
+        .onUpdate(function(){
+            camera.position.set(this.x, this.y, this.z);
+            camera.lookAt(sphere.position);
         })
-        .start();
+        .onComplete(function(){
+            camera.lookAt(sphere.position);
+        });
+
+    tween.chain(tweenZoomIn);
+    tweenZoomIn.delay(20);
+    tween.start();
 };
 
 $(document).ready(function () {
-    $('#label').click(function () {
-        centreCameraOnLabel(3);
+    $('.label').click(function () {
+        centreCameraOnLabel(3, this.id);
     });
 });
+
+createLabels('body');
+addLabelOnSphere();
 
 animate();
