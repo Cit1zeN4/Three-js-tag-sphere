@@ -65,19 +65,47 @@ scene.add(skybox);
 var labels = [
     {label: "text1", vector: null},
     {label: "text2", vector: null},
-    {label: "text3", vector: null},
-    {label: "text4", vector: null},
-    {label: "text4", vector: null},
-    {label: "text4", vector: null},
-    {label: "text4", vector: null},
-    {label: "text4", vector: null},
-    {label: "text1", vector: null},
+    {label: "text2", vector: null},
+    {label: "text2", vector: null},
+    {label: "text2", vector: null},
+    {label: "text2", vector: null},
+    {label: "text2", vector: null},
+    {label: "text2", vector: null},
+    {label: "text2", vector: null},
+    {label: "text2", vector: null},
+    {label: "text2", vector: null},
+    {label: "text2", vector: null},
     {label: "text2", vector: null}
-    
 ];
 
 var label = document.getElementById("label");
 camera.position.z = 30;
+
+function LabelBehindSphere(opacity){
+    if(opacity < 0)
+        opacity = 0;
+    if(opacity > 1)
+        opacity = 1;
+
+    var cameraFrom = new THREE.Vector3(camera.position.x, camera.position.y, camera.position.z);
+
+    for(var i = 0; i < labels.length; i++){
+        var label = $('.label, [id = ' + i + ']');
+        var distanceToSpher = cameraFrom.distanceTo(sphere.position).toFixed(2);
+        var distanceToLabel = cameraFrom.distanceTo(labels[i].vector).toFixed(2);
+    
+        if(distanceToSpher - distanceToLabel < 0){
+            var factor = (1 / (distanceToSpher - distanceToLabel)).toFixed(2) * -1;
+            factor += opacity;
+            if(factor > 0 && factor <= 1){
+                label[i].style.opacity = factor;
+            }
+        }
+        else{
+            label[i].style.opacity = 1;
+        }
+    }
+}
 
 function animate() {
     TWEEN.update();
@@ -126,6 +154,7 @@ function updateLabel() {
         label[i].style.left = pos.x + 'px';
         label[i].style.top = pos.y + 'px';
     }
+    LabelBehindSphere(0.2);
 };
 
 function centreCameraOnLabel(factor, id) {
