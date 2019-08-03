@@ -114,7 +114,7 @@ function updateLabel() {
     }
 };
 
-function centreCameraOnLabel(factor) {
+function centreCameraOnLabel(factor, id) {
     var from = {
         x: camera.position.x,
         y: camera.position.y,
@@ -122,9 +122,9 @@ function centreCameraOnLabel(factor) {
     };
 
     var to = {
-        x: sphere.geometry.vertices[testing_vector].x * factor,
-        y: sphere.geometry.vertices[testing_vector].y * factor,
-        z: sphere.geometry.vertices[testing_vector].z * factor
+        x: labels[id].vector.x * factor,
+        y: labels[id].vector.y * factor,
+        z: labels[id].vector.z * factor
     };
 
     var tween = new TWEEN.Tween(from)
@@ -168,7 +168,7 @@ function centreCameraOnLabel(factor) {
 
 $(document).ready(function () {
     $('.label').click(function () {
-        centreCameraOnLabel(3);
+        centreCameraOnLabel(3, this.id);
     });
 });
 
