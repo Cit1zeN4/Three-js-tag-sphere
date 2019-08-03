@@ -7,6 +7,8 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
     <style>
+        @import url('https://fonts.googleapis.com/css?family=Cousine&display=swap');
+
         body {
             overflow: hidden;
             margin: 0;
@@ -17,12 +19,21 @@
             position: absolute;
             left: 20px;
             top: 20px;
+            font-family: 'Cousine', monospace;
+            user-select: none;
+        }
+
+        #label:hover {
+            -webkit-transform: scale(1.5);
+            -ms-transform: scale(1.5);
+            transform: scale(1.5);
+            transition: 100ms;
         }
     </style>
 </head>
 
 <body>
-    <div id="label">text</div>
+    <div id="label">Медведев</div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/106/three.js"></script>
     <script src="./trackBallControl.js"></script>
     <script src="./main.js"></script>
