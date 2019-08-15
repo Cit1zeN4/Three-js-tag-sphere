@@ -56,7 +56,7 @@ materialArray.push(new THREE.MeshBasicMaterial({ map: texture_bottom }));
 materialArray.push(new THREE.MeshBasicMaterial({ map: texture_right }));
 materialArray.push(new THREE.MeshBasicMaterial({ map: texture_left }));
 
-for (let i = 0; i < 6; i++)
+for (var i = 0; i < 6; i++)
     materialArray[i].side = THREE.BackSide;
 
 var skyboxGeo = new THREE.BoxGeometry(1000, 1000, 1000);
@@ -99,7 +99,7 @@ function LabelBehindSphere(opacity, fontSize) {
         var distanceToSpher = cameraFrom.distanceTo(sphere.position).toFixed(2);
         var distanceToLabel = cameraFrom.distanceTo(labels[i].vector).toFixed(2);
 
-        if (distanceToSpher - distanceToLabel < 0) {
+        if(distanceToSpher - distanceToLabel < 0){
             var factor = (1 / (distanceToSpher - distanceToLabel)).toFixed(2) * -1;
             var fontSizeFactor = factor + fontSize;
             factor += opacity;
@@ -136,7 +136,7 @@ function createLabels(parent) {
 //for example 2 - this is spirals
 //you can change this factor in range from 0.1 to 19.0
 //and it's for minus
-//for plus you can add value in range from 0.1 to from 0.6 
+//for plus you can add value in range from 0.1 to from 0.6
 //and get various figure
 function addLabelOnSphere(location_factor) {
     var verts = sphere.geometry.vertices;
@@ -165,8 +165,10 @@ function updateLabel() {
         label[i].style.left = pos.x + 'px';
         label[i].style.top = pos.y + 'px';
     }
+
     if(!isAnimationInProgress)
         LabelBehindSphere(0.28, 0.5);
+    ChangeSizeLabel(450);
 };
 
 function centreCameraOnLabel(factor, id) {
@@ -246,7 +248,14 @@ function centreCameraOnLabel(factor, id) {
     tweenZoomIn.delay(20);
     tweenZoomOut.delay(500);
     tween.start();
-};
+}
+//The number must be divided by 30 to get 15
+function ChangeSizeLabel(factor){
+for(var i = 0; i < labels.length; i++){
+    var label = $('.label, [id = ' + i + ']');
+       label[i].style.fontSize = Math.round(factor/sphere.position.distanceTo(camera.position)) + 'px';
+  }
+}
 
 $(document).ready(function () {
     updateLabel();
