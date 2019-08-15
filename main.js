@@ -187,6 +187,9 @@ function centreCameraOnLabel(factor, id) {
     var tween = new TWEEN.Tween(from)
         .to(to, 800)
         .easing(TWEEN.Easing.Quadratic.InOut)
+        .onStart(function(){
+          controls.enabled = false;
+        })
         .onUpdate(function () {
             camera.position.set(this.x, this.y, this.z);
             camera.lookAt(sphere.position);
@@ -241,14 +244,15 @@ function centreCameraOnLabel(factor, id) {
             camera.lookAt(sphere.position);
             isAnimationInProgress = false;
             updateLabel();
+            controls.enabled = true;
         });
-        
+
     tween.chain(tweenZoomIn);
     tweenZoomIn.chain(tweenZoomOut);
     tweenZoomIn.delay(20);
     tweenZoomOut.delay(500);
     tween.start();
-}
+  };
 //The number must be divided by 30 to get 15
 function ChangeSizeLabel(factor){
 for(var i = 0; i < labels.length; i++){
