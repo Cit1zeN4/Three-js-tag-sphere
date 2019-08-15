@@ -55,7 +55,7 @@ materialArray.push(new THREE.MeshBasicMaterial({ map: texture_bottom }));
 materialArray.push(new THREE.MeshBasicMaterial({ map: texture_right }));
 materialArray.push(new THREE.MeshBasicMaterial({ map: texture_left }));
 
-for (let i = 0; i < 6; i++)
+for (var i = 0; i < 6; i++)
     materialArray[i].side = THREE.BackSide;
 
 var skyboxGeo = new THREE.BoxGeometry(1000, 1000, 1000);
@@ -98,7 +98,7 @@ function LabelBehindSphere(opacity, fontSize){
         var label = $('.label, [id = ' + i + ']');
         var distanceToSpher = cameraFrom.distanceTo(sphere.position).toFixed(2);
         var distanceToLabel = cameraFrom.distanceTo(labels[i].vector).toFixed(2);
-    
+
         if(distanceToSpher - distanceToLabel < 0){
             var factor = (1 / (distanceToSpher - distanceToLabel)).toFixed(2) * -1;
             var fontSizeFactor = factor + fontSize;
@@ -135,14 +135,14 @@ function createLabels(parent){
 //for example 2 - this is spirals
 //you can change this factor in range from 0.1 to 19.0
 //and it's for minus
-//for plus you can add value in range from 0.1 to from 0.6 
+//for plus you can add value in range from 0.1 to from 0.6
 //and get various figure
 function addLabelOnSphere(location_factor){
     var verts = sphere.geometry.vertices;
     var param = (verts.length / labels.length) + location_factor;
-         
+
     for(var i = 0; i < labels.length; i++){
-        labels[i].vector = verts[Math.round(i * param)];        
+        labels[i].vector = verts[Math.round(i * param)];
     }
 
 }
@@ -166,7 +166,8 @@ function updateLabel() {
         label[i].style.top = pos.y + 'px';
     }
     LabelBehindSphere(0.28, 0.5);
-};
+    ChangeSizeLabel(450);
+}
 
 function centreCameraOnLabel(factor, id) {
     var from = {
@@ -197,13 +198,13 @@ function centreCameraOnLabel(factor, id) {
         y: to.y,
         z: to.z
     };
-    
+
     var zoomInTo = {
         x: zoomInFrom.x / factor,
         y: zoomInFrom.y / factor,
         z: zoomInFrom.z / factor,
     };
-    
+
     var tweenZoomIn = new TWEEN.Tween(zoomInFrom)
         .to(zoomInTo, 750)
         .easing(TWEEN.Easing.Quadratic.InOut)
@@ -218,7 +219,14 @@ function centreCameraOnLabel(factor, id) {
     tween.chain(tweenZoomIn);
     tweenZoomIn.delay(20);
     tween.start();
-};
+}
+//The number must be divided by 30 to get 15
+function ChangeSizeLabel(factor){
+for(var i = 0; i < labels.length; i++){
+    var label = $('.label, [id = ' + i + ']');
+       label[i].style.fontSize = Math.round(factor/sphere.position.distanceTo(camera.position)) + 'px';
+  }
+}
 
 $(document).ready(function () {
     updateLabel();
