@@ -1,4 +1,5 @@
 var sphereControlState = 0;
+var isAnimationInProgress = false;
 
 var scene = new THREE.Scene();
 var w = window.innerWidth, h = window.innerHeight;
@@ -130,6 +131,7 @@ function createLabels(parent) {
         domParent.append('<div class="label" id=' + i + '>' + labels[i].label + '</div>');
     }
 }
+
 //This @param create something figure that consist of our object
 //for example 2 - this is spirals
 //you can change this factor in range from 0.1 to 19.0
@@ -163,7 +165,8 @@ function updateLabel() {
         label[i].style.left = pos.x + 'px';
         label[i].style.top = pos.y + 'px';
     }
-    LabelBehindSphere(0.28, 0.5);
+    if(!isAnimationInProgress)
+        LabelBehindSphere(0.28, 0.5);
 };
 
 function centreCameraOnLabel(factor, id) {
@@ -211,6 +214,12 @@ function centreCameraOnLabel(factor, id) {
         })
         .onComplete(function () {
             camera.lookAt(sphere.position);
+            for(var i = 0; i < labels.length; i++){
+                var label = $('.label, [id = ' + i + ']');
+                isAnimationInProgress = true;
+                // TODO: add animation
+                label[i].style.opacity = 0;
+            }
         });
 
     var zoomOutTo = {
@@ -228,6 +237,8 @@ function centreCameraOnLabel(factor, id) {
         })
         .onComplete(function () {
             camera.lookAt(sphere.position);
+            isAnimationInProgress = false;
+            updateLabel();
         });
         
     tween.chain(tweenZoomIn);
