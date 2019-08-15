@@ -1,4 +1,4 @@
-var testing_vector = 44;
+var sphereControlState = 0;
 
 var scene = new THREE.Scene();
 var w = window.innerWidth, h = window.innerHeight;
@@ -14,26 +14,26 @@ controls.addEventListener("change", updateLabel);
 
 var geometry = new THREE.SphereGeometry(9, 25, 25);
 var material = new THREE.MeshBasicMaterial({
-     color: 0x4d4d4d,
-     wireframe: true,
-     wireframeLinewidth: 40,
-     wireframeLinecap: 'round',
-     wireframeLinejoin: 'round',
-     shading: THREE.SmoothShading,
-     vertexColors: THREE.NoColors, //used if colors on geomtry
-     reflectivity: 1,
-     refractionRatio: 0.98,
-     combine: THREE.MultiplyOperation,
-     fog: true,
-     aoMap: null,
-     aoMapIntensity: 1,
-     envMap: null,
-     map: null,
-     specularMap: null,
-     alphaMap: null,
-     skinning: true,
-     morphTargets: false
-   });
+    color: 0x4d4d4d,
+    wireframe: true,
+    wireframeLinewidth: 40,
+    wireframeLinecap: 'round',
+    wireframeLinejoin: 'round',
+    shading: THREE.SmoothShading,
+    vertexColors: THREE.NoColors, //used if colors on geomtry
+    reflectivity: 1,
+    refractionRatio: 0.98,
+    combine: THREE.MultiplyOperation,
+    fog: true,
+    aoMap: null,
+    aoMapIntensity: 1,
+    envMap: null,
+    map: null,
+    specularMap: null,
+    alphaMap: null,
+    skinning: true,
+    morphTargets: false
+});
 var sphere = new THREE.Mesh(geometry, wireframe);
 var wireframe = new THREE.WireframeGeometry(geometry);
 
@@ -63,55 +63,54 @@ var skybox = new THREE.Mesh(skyboxGeo, materialArray);
 scene.add(skybox);
 
 var labels = [
-    {label: "text1", vector: null},
-    {label: "text2", vector: null},
-    {label: "text3", vector: null},
-    {label: "text4", vector: null},
-    {label: "text5", vector: null},
-    {label: "text6", vector: null},
-    {label: "text7", vector: null},
-    {label: "text8", vector: null},
-    {label: "text9", vector: null},
-    {label: "text10", vector: null},
-    {label: "text11", vector: null},
-    {label: "text12", vector: null},
-    {label: "text13", vector: null}
+    { label: "text1", vector: null },
+    { label: "text2", vector: null },
+    { label: "text3", vector: null },
+    { label: "text4", vector: null },
+    { label: "text5", vector: null },
+    { label: "text6", vector: null },
+    { label: "text7", vector: null },
+    { label: "text8", vector: null },
+    { label: "text9", vector: null },
+    { label: "text10", vector: null },
+    { label: "text11", vector: null },
+    { label: "text12", vector: null },
+    { label: "text13", vector: null }
 ];
 
 var label = document.getElementById("label");
 camera.position.z = 30;
 
-function LabelBehindSphere(opacity, fontSize){
-    if(opacity < 0 && fontSize < 0){
+function LabelBehindSphere(opacity, fontSize) {
+    if (opacity < 0 && fontSize < 0) {
         opacity = 0;
         fontSize = 0;
     }
-    if(opacity > 1 && fontSize > 1)
-    {
+    if (opacity > 1 && fontSize > 1) {
         opacity = 1;
         fontSize = 1;
     }
 
     var cameraFrom = new THREE.Vector3(camera.position.x, camera.position.y, camera.position.z);
 
-    for(var i = 0; i < labels.length; i++){
+    for (var i = 0; i < labels.length; i++) {
         var label = $('.label, [id = ' + i + ']');
         var distanceToSpher = cameraFrom.distanceTo(sphere.position).toFixed(2);
         var distanceToLabel = cameraFrom.distanceTo(labels[i].vector).toFixed(2);
-    
-        if(distanceToSpher - distanceToLabel < 0){
+
+        if (distanceToSpher - distanceToLabel < 0) {
             var factor = (1 / (distanceToSpher - distanceToLabel)).toFixed(2) * -1;
             var fontSizeFactor = factor + fontSize;
             factor += opacity;
-            if(factor > 0 && factor <= 1){
+            if (factor > 0 && factor <= 1) {
                 label[i].style.opacity = factor;
             }
-            if(fontSizeFactor > 0 && fontSizeFactor <= 1){
+            if (fontSizeFactor > 0 && fontSizeFactor <= 1) {
                 label[i].style.transform = 'scale(' + fontSizeFactor + ')';
                 console.log(fontSizeFactor);
             }
         }
-        else{
+        else {
             label[i].style.opacity = 1;
             label[i].style.transform = 'scale(1)';
         }
@@ -125,8 +124,8 @@ function animate() {
     renderer.render(scene, camera);
 }
 
-function createLabels(parent){
-    for(var i = 0; i < labels.length; i++){
+function createLabels(parent) {
+    for (var i = 0; i < labels.length; i++) {
         var domParent = $(parent);
         domParent.append('<div class="label" id=' + i + '>' + labels[i].label + '</div>');
     }
@@ -137,12 +136,12 @@ function createLabels(parent){
 //and it's for minus
 //for plus you can add value in range from 0.1 to from 0.6 
 //and get various figure
-function addLabelOnSphere(location_factor){
+function addLabelOnSphere(location_factor) {
     var verts = sphere.geometry.vertices;
     var param = (verts.length / labels.length) + location_factor;
-         
-    for(var i = 0; i < labels.length; i++){
-        labels[i].vector = verts[Math.round(i * param)];        
+
+    for (var i = 0; i < labels.length; i++) {
+        labels[i].vector = verts[Math.round(i * param)];
     }
 
 }
@@ -159,7 +158,7 @@ function getScreenPosition(position) {
 }
 
 function updateLabel() {
-    for(var i = 0; i < labels.length; i++){
+    for (var i = 0; i < labels.length; i++) {
         var pos = getScreenPosition(labels[i].vector);
         var label = $('.label, [id = ' + i + ']');
         label[i].style.left = pos.x + 'px';
@@ -184,11 +183,11 @@ function centreCameraOnLabel(factor, id) {
     var tween = new TWEEN.Tween(from)
         .to(to, 800)
         .easing(TWEEN.Easing.Quadratic.InOut)
-        .onUpdate(function(){
+        .onUpdate(function () {
             camera.position.set(this.x, this.y, this.z);
             camera.lookAt(sphere.position);
         })
-        .onComplete(function(){
+        .onComplete(function () {
             camera.lookAt(sphere.position);
         });
 
@@ -197,21 +196,21 @@ function centreCameraOnLabel(factor, id) {
         y: to.y,
         z: to.z
     };
-    
+
     var zoomInTo = {
         x: zoomInFrom.x / factor,
         y: zoomInFrom.y / factor,
         z: zoomInFrom.z / factor,
     };
-    
+
     var tweenZoomIn = new TWEEN.Tween(zoomInFrom)
         .to(zoomInTo, 750)
         .easing(TWEEN.Easing.Quadratic.InOut)
-        .onUpdate(function(){
+        .onUpdate(function () {
             camera.position.set(this.x, this.y, this.z);
             camera.lookAt(sphere.position);
         })
-        .onComplete(function(){
+        .onComplete(function () {
             camera.lookAt(sphere.position);
         });
 
@@ -223,7 +222,23 @@ function centreCameraOnLabel(factor, id) {
 $(document).ready(function () {
     updateLabel();
     $('.label').click(function () {
-        centreCameraOnLabel(3, this.id);
+        switch (sphereControlState) {
+            case 0:
+                centreCameraOnLabel(3, this.id);
+                sphereControlState = 1;
+                break;
+            case 1:
+                centreCameraOnLabel(3, this.id);
+                sphereControlState = 2;
+                break;
+            case 2:
+                centreCameraOnLabel(3, this.id);
+                sphereControlState = 3;
+                break;
+            default:
+                alert('default value');
+                break;
+        }
     });
 });
 
