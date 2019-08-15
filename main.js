@@ -143,7 +143,6 @@ function addLabelOnSphere(location_factor) {
     for (var i = 0; i < labels.length; i++) {
         labels[i].vector = verts[Math.round(i * param)];
     }
-
 }
 
 function getScreenPosition(position) {
@@ -214,8 +213,27 @@ function centreCameraOnLabel(factor, id) {
             camera.lookAt(sphere.position);
         });
 
+    var zoomOutTo = {
+        x: zoomInTo.x * factor,
+        y: zoomInTo.y * factor,
+        z: zoomInTo.z * factor
+    };
+
+    var tweenZoomOut = new TWEEN.Tween(zoomInTo)
+        .to(zoomOutTo, 1500)
+        .easing(TWEEN.Easing.Quadratic.InOut)
+        .onUpdate(function () {
+            camera.position.set(this.x, this.y, this.z);
+            camera.lookAt(sphere.position);
+        })
+        .onComplete(function () {
+            camera.lookAt(sphere.position);
+        });
+        
     tween.chain(tweenZoomIn);
+    tweenZoomIn.chain(tweenZoomOut);
     tweenZoomIn.delay(20);
+    tweenZoomOut.delay(500);
     tween.start();
 };
 
