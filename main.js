@@ -306,7 +306,7 @@ $(document).ready(function () {
                 sphereControlState = 2;
                 break;
             default:
-                alert('soom');
+                alert('soon');
                 break;
         }
     });
