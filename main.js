@@ -1,5 +1,6 @@
 var sphereControlState = 0;
 var isAnimationInProgress = false;
+var isUpdateLabelEnabled = true;
 
 var scene = new THREE.Scene();
 var w = window.innerWidth, h = window.innerHeight;
@@ -64,19 +65,37 @@ var skybox = new THREE.Mesh(skyboxGeo, materialArray);
 scene.add(skybox);
 
 var labels = [
-    { label: "text1", vector: null },
-    { label: "text2", vector: null },
-    { label: "text3", vector: null },
-    { label: "text4", vector: null },
-    { label: "text5", vector: null },
-    { label: "text6", vector: null },
-    { label: "text7", vector: null },
-    { label: "text8", vector: null },
-    { label: "text9", vector: null },
-    { label: "text10", vector: null },
-    { label: "text11", vector: null },
-    { label: "text12", vector: null },
-    { label: "text13", vector: null }
+    { label: "category1", vector: null },
+    { label: "category2", vector: null },
+    { label: "category3", vector: null },
+    { label: "category4", vector: null },
+    { label: "category5", vector: null },
+    { label: "category6", vector: null },
+    { label: "category7", vector: null },
+    { label: "category8", vector: null },
+    { label: "category9", vector: null },
+    { label: "category10", vector: null },
+    { label: "category11", vector: null },
+];
+
+//temp
+var authors = [
+    { label: "author1", vector: null },
+    { label: "author2", vector: null },
+    { label: "author3", vector: null },
+    { label: "author4", vector: null },
+    { label: "author5", vector: null },
+    { label: "author6", vector: null },
+];
+
+//temp
+var books = [
+    { label: "book1", vector: null },
+    { label: "book2", vector: null },
+    { label: "book3", vector: null },
+    { label: "book4", vector: null },
+    { label: "book5", vector: null },
+    { label: "book6", vector: null },
 ];
 
 var label = document.getElementById("label");
@@ -99,7 +118,7 @@ function LabelBehindSphere(opacity, fontSize) {
         var distanceToSpher = cameraFrom.distanceTo(sphere.position).toFixed(2);
         var distanceToLabel = cameraFrom.distanceTo(labels[i].vector).toFixed(2);
 
-        if(distanceToSpher - distanceToLabel < 0){
+        if (distanceToSpher - distanceToLabel < 0) {
             var factor = (1 / (distanceToSpher - distanceToLabel)).toFixed(2) * -1;
             var fontSizeFactor = factor + fontSize;
             factor += opacity;
@@ -108,7 +127,6 @@ function LabelBehindSphere(opacity, fontSize) {
             }
             if (fontSizeFactor > 0 && fontSizeFactor <= 1) {
                 label[i].style.transform = 'scale(' + fontSizeFactor + ')';
-                console.log(fontSizeFactor);
             }
         }
         else {
@@ -159,19 +177,21 @@ function getScreenPosition(position) {
 }
 
 function updateLabel() {
-    for (var i = 0; i < labels.length; i++) {
-        var pos = getScreenPosition(labels[i].vector);
-        var label = $('.label, [id = ' + i + ']');
-        label[i].style.left = pos.x + 'px';
-        label[i].style.top = pos.y + 'px';
-    }
+    if (isUpdateLabelEnabled) {
+        for (var i = 0; i < labels.length; i++) {
+            var pos = getScreenPosition(labels[i].vector);
+            var label = $('.label, [id = ' + i + ']');
+            label[i].style.left = pos.x + 'px';
+            label[i].style.top = pos.y + 'px';
+        }
 
-    if(!isAnimationInProgress)
-        LabelBehindSphere(0.28, 0.5);
-    ChangeSizeLabel(450);
+        if (!isAnimationInProgress)
+            LabelBehindSphere(0.28, 0.5);
+        ChangeSizeLabel(450);
+    }
 };
 
-function centreCameraOnLabel(factor, id) {
+function centreCameraOnLabel(factor, id, onAnimationComplete) {
     var from = {
         x: camera.position.x,
         y: camera.position.y,
@@ -187,8 +207,8 @@ function centreCameraOnLabel(factor, id) {
     var tween = new TWEEN.Tween(from)
         .to(to, 800)
         .easing(TWEEN.Easing.Quadratic.InOut)
-        .onStart(function(){
-          controls.enabled = false;
+        .onStart(function () {
+            controls.enabled = false;
         })
         .onUpdate(function () {
             camera.position.set(this.x, this.y, this.z);
@@ -219,12 +239,11 @@ function centreCameraOnLabel(factor, id) {
         })
         .onComplete(function () {
             camera.lookAt(sphere.position);
-            for(var i = 0; i < labels.length; i++){
+            for (var i = 0; i < labels.length; i++) {
                 var label = $('.label, [id = ' + i + ']');
                 isAnimationInProgress = true;
-                // TODO: add animation
-                label[i].style.opacity = 0;
             }
+            $('.label').animate({ opacity: 0 }, 500);
         });
 
     var zoomOutTo = {
@@ -243,6 +262,10 @@ function centreCameraOnLabel(factor, id) {
         .onComplete(function () {
             camera.lookAt(sphere.position);
             isAnimationInProgress = false;
+            $('.label').remove();
+            isUpdateLabelEnabled = false;
+            onAnimationComplete();
+            isUpdateLabelEnabled = true;
             updateLabel();
             controls.enabled = true;
         });
@@ -252,33 +275,38 @@ function centreCameraOnLabel(factor, id) {
     tweenZoomIn.delay(20);
     tweenZoomOut.delay(500);
     tween.start();
-  };
+};
+
 //The number must be divided by 30 to get 15
-function ChangeSizeLabel(factor){
-for(var i = 0; i < labels.length; i++){
-    var label = $('.label, [id = ' + i + ']');
-       label[i].style.fontSize = Math.round(factor/sphere.position.distanceTo(camera.position)) + 'px';
-  }
+function ChangeSizeLabel(factor) {
+    for (var i = 0; i < labels.length; i++) {
+        var label = $('.label, [id = ' + i + ']');
+        label[i].style.fontSize = Math.round(factor / sphere.position.distanceTo(camera.position)) + 'px';
+    }
 }
 
 $(document).ready(function () {
     updateLabel();
-    $('.label').click(function () {
+    $(document).on('click', '.label', function () {
         switch (sphereControlState) {
             case 0:
-                centreCameraOnLabel(3, this.id);
+                centreCameraOnLabel(3, this.id, function () {
+                    labels = authors;
+                    createLabels('body');
+                    addLabelOnSphere(0.4);
+                });
                 sphereControlState = 1;
                 break;
             case 1:
-                centreCameraOnLabel(3, this.id);
+                centreCameraOnLabel(3, this.id, function () {
+                    labels = books;
+                    createLabels('body');
+                    addLabelOnSphere(0.4);
+                });
                 sphereControlState = 2;
                 break;
-            case 2:
-                centreCameraOnLabel(3, this.id);
-                sphereControlState = 3;
-                break;
             default:
-                alert('default value');
+                alert('soom');
                 break;
         }
     });
