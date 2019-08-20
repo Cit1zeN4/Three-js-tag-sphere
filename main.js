@@ -12,6 +12,8 @@ var controls = new THREE.TrackballControls(camera, renderer.domElement);
 controls.rotateSpeed = 2;
 controls.noPan = true;
 controls.addEventListener("change", updateLabel);
+window.addEventListener( "resize", onWindowResize,true);
+
 
 var geometry = new THREE.SphereGeometry(9, 25, 25);
 var material = new THREE.MeshBasicMaterial({
@@ -82,6 +84,16 @@ var labels = [
 var label = document.getElementById("label");
 camera.position.z = 30;
 
+function onWindowResize(){
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.updateProjectionMatrix();
+
+    renderer.setSize( window.innerWidth, window.innerHeight );
+
+    updateLabel();
+
+}
+
 function LabelBehindSphere(opacity, fontSize) {
     if (opacity < 0 && fontSize < 0) {
         opacity = 0;
@@ -108,8 +120,7 @@ function LabelBehindSphere(opacity, fontSize) {
             }
             if (fontSizeFactor > 0 && fontSizeFactor <= 1) {
                 label[i].style.transform = 'scale(' + fontSizeFactor + ')';
-                console.log(fontSizeFactor);
-            }
+             }
         }
         else {
             label[i].style.opacity = 1;
