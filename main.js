@@ -1,3 +1,5 @@
+/*
+
 var testing_vector = 44;
 
 var scene = new THREE.Scene();
@@ -231,3 +233,6 @@ createLabels('body');
 addLabelOnSphere(0.4);
 
 animate();
+*/
+
+var TagSphere = new TagSphere('body');
